@@ -21,7 +21,7 @@ public class AutosService {
         return automobiles;
     }
 
-    public AutoList getAutomobiles(String color) {
+    public AutoList getAutomobilesByColor(String color) {
         List<Automobile> result = new ArrayList<>();
         List<Automobile> list = automobiles.getAutomobileList(); 
         for (int i = 0; i < list.size(); i++) {
@@ -30,6 +30,16 @@ public class AutosService {
             }
         }
         return new AutoList(result);
-//        automobiles.getAutomobileList(color);
+    }
+
+    public AutoList getAutomobilesByMake(String make) {
+        List<Automobile> result = new ArrayList<>();
+        List<Automobile> list = automobiles.getAutomobileList();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getColor().equals(make)) {
+                result.add(list.get(i));
+            }
+        }
+        return new AutoList(result);
     }
 }

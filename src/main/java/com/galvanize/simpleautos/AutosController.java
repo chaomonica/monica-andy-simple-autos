@@ -14,13 +14,15 @@ public class AutosController {
     }
 
     @GetMapping("/api/autos")
-    public ResponseEntity<AutoList> getAutos(@RequestParam(required = false) String color){
-        if (color == null) {
-            AutoList temp = autosService.getAutomobiles();
-            return temp.isEmpty() ? ResponseEntity.noContent().build() :ResponseEntity.ok(temp);
+    public ResponseEntity<AutoList> getAutos(@RequestParam(required = false) String color, @RequestParam(required = false) String make){
+        AutoList temp;
+        if (color == null && make == null) {
+            temp = autosService.getAutomobiles();          
+        } else if (color != null){
+            temp = autosService.getAutomobilesByColor(color);
         } else {
-            AutoList temp = autosService.getAutomobiles(color);
-            return temp.isEmpty() ? ResponseEntity.noContent().build() :ResponseEntity.ok(temp);           
-        }        
+            temp = autosService.getAutomobilesByMake(make);
+        }
+        return temp.isEmpty() ? ResponseEntity.noContent().build() :ResponseEntity.ok(temp);
     }
 }
