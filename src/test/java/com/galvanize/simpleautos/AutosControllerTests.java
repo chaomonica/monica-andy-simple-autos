@@ -1,17 +1,21 @@
 package com.galvanize.simpleautos;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -23,6 +27,8 @@ public class AutosControllerTests {
 
     @MockBean
     AutosService autosService;
+
+    ObjectMapper mapper = new ObjectMapper();
     /*
         GET ("/api/autos")
         Request Params: color (optional), make(optional)
@@ -164,7 +170,24 @@ public class AutosControllerTests {
                   "owner": "John Doe",
                   "vin": "7F03Z01025"
                 }
+    */
+    @Test
+    void addAutos_valid_ReturnsAutomobile() throws Exception {
+        Automobile automobileToAdd = new Automobile(2020, "Ford", "Toyota", "GREEN", "John Doe", "7F03Z01025");
 
+        when(autosService.addAutomobile(any(Automobile.class))).thenReturn(automobileToAdd);
+
+        mockMvc.perform(post("/api/autos").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(automobileToAdd)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("make").value("Ford"));
+    }
+
+    @Test
+    void addAutos_invalid_ReturnsBadRequest() throws Exception {
+
+    }
+    /*
          POST ("/api/autos"):
             - Status code: 200
             - returns the body back

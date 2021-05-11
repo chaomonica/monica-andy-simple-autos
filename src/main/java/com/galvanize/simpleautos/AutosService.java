@@ -1,6 +1,7 @@
 package com.galvanize.simpleautos;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,5 +53,9 @@ public class AutosService {
             }
         }
         return new AutoList(result);
+    }
+    
+    public Automobile addAutomobile(Automobile auto) {
+        return null;
     }
 }
