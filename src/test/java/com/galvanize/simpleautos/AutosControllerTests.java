@@ -37,17 +37,29 @@ public class AutosControllerTests {
             - returns "No automobiles found" message
     */
     @Test
-    void getAutos_NoArgs_ReturnsEmptyListTest() throws Exception {
+    void getAutos_NoArgs_ReturnsListTest() throws Exception {
         List<Automobile> automobiles = new ArrayList<>();
+
+        automobiles.add(new Automobile(2020, "Ford", "Mustang", "GREEN", "John Doe", "7F03Z01025"));
 
         when(autosService.getAutomobiles()).thenReturn(new AutoList(automobiles));
 
         mockMvc.perform(get("/api/autos"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.automobileList", hasSize(0)));
+                .andExpect(jsonPath("$.automobileList", hasSize(1)));
     }
 
+    @Test
+    void getAutos_NoArgs_ReturnsNoContentTest() throws Exception {
+        List<Automobile> automobiles = new ArrayList<>();
+
+        when(autosService.getAutomobiles()).thenReturn(new AutoList(automobiles));
+
+        mockMvc.perform(get("/api/autos"))
+                .andDo(print())
+                .andExpect(status().isNoContent()) ;
+    }
     /*
         GET ("/api/autos?color=green"):
             - Status code: 200
@@ -59,7 +71,7 @@ public class AutosControllerTests {
      @Test
      void getAutos_colorGreen_ReturnsListOfGreenAutomobiles() throws Exception {
          List<Automobile> automobiles = new ArrayList<>();
-         
+
          automobiles.add(new Automobile(2020, "Ford", "Mustang", "GREEN", "John Doe", "7F03Z01025"));
 
          when(autosService.getAutomobiles("green")).thenReturn(new AutoList(automobiles));
@@ -69,6 +81,7 @@ public class AutosControllerTests {
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.automobileList", hasSize(1)));
      }
+
      /*
          GET ("/api/autos?make=Toyota"):
             - Status code: 200

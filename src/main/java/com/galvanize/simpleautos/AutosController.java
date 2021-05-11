@@ -1,5 +1,6 @@
 package com.galvanize.simpleautos;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,13 +14,13 @@ public class AutosController {
     }
 
     @GetMapping("/api/autos")
-    public AutoList getAutos(@RequestParam(required = false) String color){
+    public ResponseEntity<AutoList> getAutos(@RequestParam(required = false) String color){
         if (color == null) {
-            return autosService.getAutomobiles();
+            AutoList temp = autosService.getAutomobiles();
+            return temp.isEmpty() ? ResponseEntity.noContent().build() :ResponseEntity.ok(temp);
         } else {
-            return autosService.getAutomobiles(color);
-        }
-        
+            AutoList temp = autosService.getAutomobiles(color);
+            return temp.isEmpty() ? ResponseEntity.noContent().build() :ResponseEntity.ok(temp);           
+        }        
     }
-
 }

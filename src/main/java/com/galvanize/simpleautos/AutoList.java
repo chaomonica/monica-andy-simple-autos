@@ -31,6 +31,10 @@ public class AutoList {
         this.automobileList = automobileList;
     }
 
+    public boolean isEmpty() {
+        return this.automobileList.size() == 0;
+    }
+
 //    public int size() {
 //         return automobileList.size();
 //    }
