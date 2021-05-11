@@ -237,7 +237,14 @@ public class AutosControllerTests {
     }
 
     @Test
-    void 
+    void getAutomobile_withVin_returnsNoContent() throws Exception {
+        Automobile automobileWithVin = new Automobile();
+
+        when(autosService.getAutomobileWithVin(anyString())).thenReturn(automobileWithVin);
+        mockMvc.perform(get("/api/autos/" + automobileWithVin.getVin()))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
     /*
         PATCH ("/api/autos/{vin}")
         Request Params: vin (required)
