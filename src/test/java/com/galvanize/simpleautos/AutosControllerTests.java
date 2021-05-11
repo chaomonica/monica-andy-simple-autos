@@ -59,13 +59,10 @@ public class AutosControllerTests {
      @Test
      void getAutos_colorGreen_ReturnsListOfGreenAutomobiles() throws Exception {
          List<Automobile> automobiles = new ArrayList<>();
-
-         for (int i = 0; i < 5; i++) {
-            automobiles.add(new Automobile(2020, "Ford", "Mustang", "RED", "John Doe", "7F03Z01025"));
-         }
+         
          automobiles.add(new Automobile(2020, "Ford", "Mustang", "GREEN", "John Doe", "7F03Z01025"));
 
-         when(autosService.getAutomobiles()).thenReturn(new AutoList(automobiles));
+         when(autosService.getAutomobiles("green")).thenReturn(new AutoList(automobiles));
 
          mockMvc.perform(get("/api/autos?color=green"))
                         .andDo(print())
