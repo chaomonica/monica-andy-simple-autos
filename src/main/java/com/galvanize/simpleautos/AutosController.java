@@ -40,6 +40,18 @@ public class AutosController {
 
 
     }
+    
+    @PatchMapping("/api/autos/{vin}")
+    public ResponseEntity<Automobile> updateAuto(@PathVariable String vin,
+                                 @RequestBody UpdateOwnerRequest request) {
+        Automobile temp = autosService.updateAutomobileWithVin(vin, request.getColor(), request.getOwner());
+              
+        if (vin.equals(temp.getVin()) && request.getColor().equals(temp.getColor()) && request.getOwner().equals(temp.getOwner())) {
+            return ResponseEntity.ok(temp); 
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)

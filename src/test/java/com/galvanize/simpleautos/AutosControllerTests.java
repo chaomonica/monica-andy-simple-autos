@@ -2,6 +2,7 @@ package com.galvanize.simpleautos;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.stubbing.answers.Returns;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,8 +16,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -254,6 +254,23 @@ public class AutosControllerTests {
                   "owner": "string"
                 }
 
+    */
+    @Test
+    void updateAutomobile_withObject_returnsAutomobile() throws Exception {
+        Automobile automobileWithVin = new Automobile(2020, "Ford", "Toyota", "RED", "Bob", "7F03Z01025");
+        when(autosService.updateAutomobileWithVin(anyString(), anyString(), anyString())).thenReturn(automobileWithVin);
+
+        UpdateOwnerRequest updated= new UpdateOwnerRequest("RED", "Bob");
+
+        mockMvc.perform(patch("/api/autos/" + automobileWithVin.getVin())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(updated)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("color").value("RED"))
+            .andExpect(jsonPath("owner").value("Bob"));
+
+    }
+    /*
         PATCH ("/api/autos/{vin}"):
             - Status code 200
             - Returns vehicle
@@ -268,13 +285,43 @@ public class AutosControllerTests {
 
             - Status code 204
             - Returns "Vehicle not found" message
+    */
+    @Test
+    void updateAutomobile_withVin_returnsNoContent() throws Exception {
+        Automobile automobileWithVin = new Automobile();
 
+        UpdateOwnerRequest updated= new UpdateOwnerRequest("RED", "Bob");
+
+        when(autosService.updateAutomobileWithVin(anyString(), anyString(), anyString())).thenReturn(automobileWithVin);
+        mockMvc.perform(patch("/api/autos/" + automobileWithVin.getVin())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(updated)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
+    /*
             - Status code 400
             - Returns error message
                 Ex: {
                       "message": "Bad Request"
                     }
      */
+
+    @Test
+    void updateAutomobile_withVin_returnsBadRequest() throws Exception {
+        Automobile automobileWithVin = new Automobile();
+
+        UpdateOwnerRequest updated= new UpdateOwnerRequest("RED", "Bob");
+
+        when(autosService.updateAutomobileWithVin(anyString(), anyString(), anyString())).thenThrow(InvalidAutoException.class);
+        mockMvc.perform(patch("/api/autos/" + automobileWithVin.getVin())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(updated)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+    }
+
 
     /*
         DELETE ("/api/autos/{vin}")
