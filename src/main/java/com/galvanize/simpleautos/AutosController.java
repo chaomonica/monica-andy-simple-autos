@@ -1,5 +1,6 @@
 package com.galvanize.simpleautos;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class AutosController {
     public ResponseEntity<AutoList> getAutos(@RequestParam(required = false) String color, @RequestParam(required = false) String make){
         AutoList temp;
         if (color == null && make == null) {
-            temp = autosService.getAutomobiles();          
+            temp = autosService.getAutomobiles();
         } else if (color != null && make != null){
             temp = autosService.getAutomobilesByColorAndMake(color, make);
         } else if (make != null){
@@ -29,5 +30,11 @@ public class AutosController {
     @PostMapping("/api/autos")
     public Automobile addAuto(@RequestBody Automobile auto) {
         return autosService.addAutomobile(auto);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void invalidAutoException(InvalidAutoException exception) {
+        
     }
 }

@@ -185,7 +185,13 @@ public class AutosControllerTests {
 
     @Test
     void addAutos_invalid_ReturnsBadRequest() throws Exception {
+        Automobile automobileToAdd = new Automobile(2020, "Ford", "Toyota", "GREEN", "John Doe", "7F03Z01025");
 
+        when(autosService.addAutomobile(any(Automobile.class))).thenThrow(InvalidAutoException.class);
+
+        mockMvc.perform(post("/api/autos").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(automobileToAdd)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
     /*
          POST ("/api/autos"):
