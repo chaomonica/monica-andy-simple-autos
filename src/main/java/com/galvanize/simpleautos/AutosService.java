@@ -58,4 +58,8 @@ public class AutosService {
     public Automobile addAutomobile(Automobile auto) {
         return null;
     }
+
+    public Automobile getAutomobileWithVin(String vin) {
+        return null;
+    }
 }

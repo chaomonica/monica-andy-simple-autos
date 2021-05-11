@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -171,6 +172,17 @@ public class AutosControllerTests {
                   "vin": "7F03Z01025"
                 }
     */
+    /*
+         POST ("/api/autos"):
+            - Status code: 200
+            - returns the body back
+
+            - Status code: 400
+            - returns error message
+                Ex: {
+                      "message": "BAD REQUEST"
+                    }
+     */
     @Test
     void addAutos_valid_ReturnsAutomobile() throws Exception {
         Automobile automobileToAdd = new Automobile(2020, "Ford", "Toyota", "GREEN", "John Doe", "7F03Z01025");
@@ -193,17 +205,7 @@ public class AutosControllerTests {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
-    /*
-         POST ("/api/autos"):
-            - Status code: 200
-            - returns the body back
 
-            - Status code: 400
-            - returns error message
-                Ex: {
-                      "message": "BAD REQUEST"
-                    }
-     */
 
     /*
         GET ("/api/autos/{vin}")
@@ -224,7 +226,18 @@ public class AutosControllerTests {
             - Status code: 204
             - returns "Vehicle not found"
      */
+    @Test
+    void getAutomobiles_withVin_returnsAutomobile() throws Exception {
+        Automobile automobileWithVin = new Automobile(2020, "Ford", "Toyota", "GREEN", "John Doe", "7F03Z01025");
 
+        when(autosService.getAutomobileWithVin(anyString())).thenReturn(automobileWithVin);
+        mockMvc.perform(get("/api/autos/" + automobileWithVin.getVin()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("vin").value(automobileWithVin.getVin()));
+    }
+
+    @Test
+    void 
     /*
         PATCH ("/api/autos/{vin}")
         Request Params: vin (required)
