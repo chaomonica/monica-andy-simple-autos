@@ -143,6 +143,16 @@ public class AutosControllerTests {
                           .andExpect(jsonPath("$.automobileList", hasSize(1)));
         }
 
+    @Test
+    void getAutos_makeToyota_colorGreen_ReturnsNoContentIfNotFoundTest() throws Exception {
+        List<Automobile> automobiles = new ArrayList<>();
+
+        when(autosService.getAutomobilesByColorAndMake("green", "Toyota")).thenReturn(new AutoList(automobiles));
+
+        mockMvc.perform(get("/api/autos?color=green&make=Toyota"))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
     /*
         POST ("/api/autos")
         Request body
