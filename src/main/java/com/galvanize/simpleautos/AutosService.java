@@ -66,4 +66,7 @@ public class AutosService {
     public Automobile updateAutomobileWithVin(String vin, String color, String owner) {
         return null;
     }
+
+    public void deleteAuto(String vin) {
+    }
 }

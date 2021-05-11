@@ -15,7 +15,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -327,11 +327,27 @@ public class AutosControllerTests {
         DELETE ("/api/autos/{vin}")
         Request Params: vin (required)
 
-        DELETE ("/api/autos/{vin}"):
-            - Status code 202
-            - Returns "Automobile delete request accepted" message
+        - Status code 202
+        - Returns "Automobile delete request accepted" message
+    */
+    @Test
+    void deleteAuto_withVin_returns202() throws Exception {
 
+        mockMvc.perform(delete("/api/autos/1234"))
+                .andExpect(status().isAccepted());
+        verify(autosService).deleteAuto(anyString());
+    }
+
+    /*
+        DELETE ("/api/autos/{vin}"):
             - Status code 204
             - Returns "Vehicle not found" message
      */
+    @Test
+    void deleteAuto_withVin_returnsNoContent() throws Exception {
+        doThrow(new AutoNotFoundException()).when(autosService).deleteAuto(anyString());
+
+        mockMvc.perform(delete("/api/autos/1234"))
+                .andExpect(status().isNoContent());
+    }
 }
