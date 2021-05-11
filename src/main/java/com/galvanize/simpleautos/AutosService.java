@@ -36,7 +36,18 @@ public class AutosService {
         List<Automobile> result = new ArrayList<>();
         List<Automobile> list = automobiles.getAutomobileList();
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getColor().equals(make)) {
+            if (list.get(i).getMake().equals(make)) {
+                result.add(list.get(i));
+            }
+        }
+        return new AutoList(result);
+    }
+
+    public AutoList getAutomobilesByColorAndMake(String color, String make) {
+        List<Automobile> result = new ArrayList<>();
+        List<Automobile> list = automobiles.getAutomobileList();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getColor().equals(color) && list.get(i).getMake().equals(make)) {
                 result.add(list.get(i));
             }
         }

@@ -100,18 +100,27 @@ public class AutosControllerTests {
             - returns "No automobiles found" message
      */
       @Test
-          void getAutos_makeToyota_ReturnsListOfToyotaAutomobiles() throws Exception {
-              List<Automobile> automobiles = new ArrayList<>();
-              automobiles.add(new Automobile(2020, "Ford", "Toyota", "GREEN", "John Doe", "7F03Z01025"));
+      void getAutos_makeToyota_ReturnsListOfToyotaAutomobiles() throws Exception {
+          List<Automobile> automobiles = new ArrayList<>();
+          automobiles.add(new Automobile(2020, "Ford", "Toyota", "GREEN", "John Doe", "7F03Z01025"));
 
-              when(autosService.getAutomobilesByMake("Toyota")).thenReturn(new AutoList(automobiles));
+          when(autosService.getAutomobilesByMake("Toyota")).thenReturn(new AutoList(automobiles));
 
-              mockMvc.perform(get("/api/autos?make=Toyota"))
-                             .andDo(print())
-                             .andExpect(status().isOk())
-                             .andExpect(jsonPath("$.automobileList", hasSize(1)));
-          }
+          mockMvc.perform(get("/api/autos?make=Toyota"))
+                         .andDo(print())
+                         .andExpect(status().isOk())
+                         .andExpect(jsonPath("$.automobileList", hasSize(1)));
+      }
 
+    @Test
+    void getAutos_makeToyota_ReturnsNoContentIfNotFoundTest() throws Exception {
+        List<Automobile> automobiles = new ArrayList<>();
+        when(autosService.getAutomobilesByMake("Toyota")).thenReturn(new AutoList(automobiles));
+
+        mockMvc.perform(get("/api/autos?make=Toyota"))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
      /*
           GET ("/api/autos?make=Toyota&color=green"):
             - Status code: 200
@@ -120,6 +129,19 @@ public class AutosControllerTests {
             - Status code: 204
             - returns "No automobiles found" message
      */
+
+    @Test
+        void getAutos_makeToyota_colorGreen_ReturnsListOfGreenToyotaAutomobiles() throws Exception {
+           List<Automobile> automobiles = new ArrayList<>();
+           automobiles.add(new Automobile(2020, "Ford", "Toyota", "GREEN", "John Doe", "7F03Z01025"));
+
+           when(autosService.getAutomobilesByColorAndMake("green", "Toyota")).thenReturn(new AutoList(automobiles));
+
+           mockMvc.perform(get("/api/autos?color=green&make=Toyota"))
+                          .andDo(print())
+                          .andExpect(status().isOk())
+                          .andExpect(jsonPath("$.automobileList", hasSize(1)));
+        }
 
     /*
         POST ("/api/autos")
