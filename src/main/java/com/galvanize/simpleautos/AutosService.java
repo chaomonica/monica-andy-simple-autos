@@ -92,6 +92,10 @@ public class AutosService {
     }
     
     public Automobile addAutomobile(Automobile auto) {
+        Automobile added = autosRepository.save(auto);
+        if (added.isNotNull()) {
+            return added;
+        }        
         return null;
     }
 

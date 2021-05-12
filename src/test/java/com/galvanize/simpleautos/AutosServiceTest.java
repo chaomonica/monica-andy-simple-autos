@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -86,6 +88,14 @@ class AutosServiceTest {
 
     @Test
     void addAutomobile() {
+        Automobile automobileToAdd = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
+
+        when(autosRepository.save(any(Automobile.class)))
+                .thenReturn(automobileToAdd);
+        Automobile auto = autosService.addAutomobile(automobileToAdd);
+
+        assertThat(auto).isNotNull();
+        assertThat(auto.getMake()).isEqualTo("Toyota");
     }
 
     @Test
