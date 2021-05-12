@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AutosService {
@@ -33,11 +34,11 @@ public class AutosService {
         // put result in a list
         // return a new AutoList automobiles
         List <Automobile> automobiles = autosRepository.findAll();
-        
+
         if (!automobiles.isEmpty()) {
             return new AutoList(automobiles);
         }
-        return null;      
+        return null;
         //return automobiles;
     }
 
@@ -50,7 +51,7 @@ public class AutosService {
             }
         }
         return new AutoList(result);*/
-        
+
         // return null;
         List<Automobile> automobiles = autosRepository.findByColor(color);
         if (!automobiles.isEmpty()) {
@@ -71,7 +72,7 @@ public class AutosService {
         List<Automobile> automobiles = autosRepository.findByMake(make);
         if (!automobiles.isEmpty()) {
             return new AutoList(automobiles);
-        }        
+        }
         return null;
     }
 
@@ -87,7 +88,7 @@ public class AutosService {
         List<Automobile> automobiles = autosRepository.findByColorAndMake(color, make);
         if (!automobiles.isEmpty()) {
             return new AutoList(automobiles);
-        }        
+        }
         return null;
     }
     
@@ -95,15 +96,23 @@ public class AutosService {
         Automobile added = autosRepository.save(auto);
         if (added.isNotNull()) {
             return added;
-        }        
+        }
         return null;
     }
 
     public Automobile getAutomobileWithVin(String vin) {
+
         return autosRepository.findByVin(vin).orElse(null);
     }
 
     public Automobile updateAutomobileWithVin(String vin, String color, String owner) {
+        Optional<Automobile> oFound = autosRepository.findByVin(vin);
+
+        if (oFound.isPresent()) {
+            oFound.get().setColor(color);
+            oFound.get().setOwner(owner);
+            return autosRepository.save(oFound.get());
+        }
         return null;
     }
 

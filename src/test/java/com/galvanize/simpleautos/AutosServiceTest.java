@@ -113,6 +113,16 @@ class AutosServiceTest {
 
     @Test
     void updateAutomobileWithVin() {
+        Automobile automobileWithVin = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
+
+        when(autosRepository.findByVin(anyString()))
+                .thenReturn(Optional.of(automobileWithVin));
+        when(autosRepository.save(any(Automobile.class)))
+                .thenReturn(automobileWithVin);
+        Automobile auto = autosService.updateAutomobileWithVin(automobileWithVin.getVin(), "BLACK", "Jane Doe");
+
+        assertThat(auto).isNotNull();
+        assertThat(auto.getMake()).isEqualTo("Toyota");
     }
 
     @Test
