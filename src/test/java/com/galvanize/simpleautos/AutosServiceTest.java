@@ -72,6 +72,15 @@ class AutosServiceTest {
 
     @Test
     void getAutomobilesByColorAndMake() {
+        List<Automobile> automobiles = new ArrayList<>();
+        automobiles.add(new Automobile(2020, "Ford", "Mustang", "GREEN", "John Doe", "7F03Z01025"));
+
+        when(autosRepository.findByColorAndMake(anyString(), anyString()))
+                .thenReturn(automobiles);
+        AutoList autosList = autosService.getAutomobilesByColorAndMake("GREEN", "Mustang");
+
+        assertThat(autosList).isNotNull();
+        assertThat(autosList.isEmpty()).isFalse();
 
     }
 
