@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -126,6 +127,17 @@ class AutosServiceTest {
     }
 
     @Test
-    void deleteAuto() {
+    void deleteAuto_byVin() {
+        Automobile automobileWithVin = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
+
+        when(autosRepository.findByVin(anyString())).thenReturn(Optional.of(automobileWithVin));
+        autosService.deleteAuto(automobileWithVin.getVin());
+
+        verify(autosRepository).delete(any(Automobile.class));
+    }
+
+    @Test
+    void deleteAuto_byVin_notExists() {
+
     }
 }

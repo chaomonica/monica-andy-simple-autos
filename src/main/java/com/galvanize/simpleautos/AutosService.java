@@ -117,5 +117,9 @@ public class AutosService {
     }
 
     public void deleteAuto(String vin) {
+        Optional<Automobile> oFound = autosRepository.findByVin(vin);
+        if (oFound.isPresent()) {
+            autosRepository.delete(oFound.get());
+        }
     }
 }
