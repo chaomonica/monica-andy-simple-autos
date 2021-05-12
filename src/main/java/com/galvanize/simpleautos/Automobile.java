@@ -20,7 +20,10 @@ public class Automobile {
         this.owner = owner;
         this.vin = vin;
     }
-
+    public boolean isNotNull() {
+        return this.make != null;
+    }
+    
     public int getYear() {
         return year;
     }
