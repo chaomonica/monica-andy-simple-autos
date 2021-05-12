@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -139,5 +140,11 @@ class AutosServiceTest {
     @Test
     void deleteAuto_byVin_notExists() {
 
+        when(autosRepository.findByVin(anyString())).thenReturn(Optional.empty());
+
+        assertThatExceptionOfType(AutoNotFoundException.class)
+            .isThrownBy(() -> {
+                autosService.deleteAuto("VIN NOT EXIST");
+            });
     }
 }

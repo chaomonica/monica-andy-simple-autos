@@ -120,6 +120,8 @@ public class AutosService {
         Optional<Automobile> oFound = autosRepository.findByVin(vin);
         if (oFound.isPresent()) {
             autosRepository.delete(oFound.get());
+        } else {
+            throw new AutoNotFoundException();
         }
     }
 }
