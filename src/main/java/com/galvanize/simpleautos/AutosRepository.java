@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface AutosRepository extends JpaRepository <Automobile, Long>{
     List<Automobile> findByColor(String color);
+    List<Automobile> findByMake(String make);
 }

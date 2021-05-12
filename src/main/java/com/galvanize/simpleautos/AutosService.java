@@ -68,6 +68,10 @@ public class AutosService {
             }
         }
         return new AutoList(result);*/
+        List<Automobile> automobiles = autosRepository.findByMake(make);
+        if (!automobiles.isEmpty()) {
+            return new AutoList(automobiles);
+        }        
         return null;
     }
 
