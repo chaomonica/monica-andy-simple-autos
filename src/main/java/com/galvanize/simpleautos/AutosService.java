@@ -100,7 +100,7 @@ public class AutosService {
     }
 
     public Automobile getAutomobileWithVin(String vin) {
-        return null;
+        return autosRepository.findByVin(vin).orElse(null);
     }
 
     public Automobile updateAutomobileWithVin(String vin, String color, String owner) {

@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -99,7 +100,15 @@ class AutosServiceTest {
     }
 
     @Test
-    void getAutomobileWithVin() {
+    void getAutomobileWithVin_returnsAutomobile() {
+        Automobile automobileWithVin = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
+
+        when(autosRepository.findByVin(anyString()))
+                .thenReturn(Optional.of(automobileWithVin));
+        Automobile auto = autosService.getAutomobileWithVin("helloworld");
+
+        assertThat(auto).isNotNull();
+        assertThat(auto.getMake()).isEqualTo("Toyota");
     }
 
     @Test
