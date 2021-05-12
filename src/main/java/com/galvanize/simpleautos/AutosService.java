@@ -32,7 +32,12 @@ public class AutosService {
         // query database - "select * from autos"
         // put result in a list
         // return a new AutoList automobiles
-        return new AutoList(autosRepository.findAll());
+        List <Automobile> automobiles = autosRepository.findAll();
+        
+        if (!automobiles.isEmpty()) {
+            return new AutoList(automobiles);
+        }
+        return null;      
         //return automobiles;
     }
 
@@ -45,6 +50,12 @@ public class AutosService {
             }
         }
         return new AutoList(result);*/
+        
+        // return null;
+        List<Automobile> automobiles = autosRepository.findByColor(color);
+        if (!automobiles.isEmpty()) {
+            return new AutoList(automobiles);
+        }
         return null;
     }
 
