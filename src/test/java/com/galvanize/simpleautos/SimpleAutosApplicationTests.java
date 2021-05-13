@@ -189,6 +189,20 @@ class SimpleAutosApplicationTests {
         assertThat(response.getBody().getVin()).isEqualTo(automobileToAdd.getVin());
     }
 
+//    @Test
+//    void addAuto_ReturnsBadRequest() {
+//        Automobile automobileToAdd = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Content-Type", MediaType.APPLICATION_PDF_VALUE);
+//        HttpEntity<Automobile> request = new HttpEntity<>(automobileToAdd, headers);
+//
+//        ResponseEntity<?> response = testRestTemplate.postForEntity("/api/autos", request, Automobile.class);
+//
+//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+//        assertThat(response.getBody()).isNotNull();;
+//    }
+
     @Test
     void patchAuto_ReturnsAuto() {
         testRestTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
