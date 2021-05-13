@@ -123,4 +123,21 @@ class SimpleAutosApplicationTests {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getVin()).isEqualTo(automobileToPatch.getVin());
     }
+
+    @Test
+    void deleteAuto_returns500() {
+        Automobile automobileToAdd = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+        //post request to add auto to delete later
+        HttpEntity<Automobile> postRequest = new HttpEntity<>(automobileToAdd, headers);
+        testRestTemplate.postForEntity("/api/autos", postRequest, Automobile.class);
+
+        testRestTemplate.delete("/api/autos/7F03Z01025");
+
+        ResponseEntity<Automobile> response = testRestTemplate.getForEntity("/api/autos/7F03Z01025", Automobile.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
