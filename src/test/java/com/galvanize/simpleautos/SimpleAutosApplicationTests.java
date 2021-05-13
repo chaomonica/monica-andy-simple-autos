@@ -138,6 +138,6 @@ class SimpleAutosApplicationTests {
         testRestTemplate.delete("/api/autos/7F03Z01025");
 
         ResponseEntity<Automobile> response = testRestTemplate.getForEntity("/api/autos/7F03Z01025", Automobile.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 }
