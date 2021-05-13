@@ -70,6 +70,14 @@ class SimpleAutosApplicationTests {
     }
 
     @Test
+    void getAutos_returnsNoContent() {
+        autosRepository.deleteAll();
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity("/api/autos", AutoList.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+    }
+
+    @Test
     void getAutos_byColorAndMake_exists_returnsColorAndMakeAutoList(){
         int seq = random.nextInt(50);
         String color = testAutos.get(seq).getColor();
@@ -89,6 +97,85 @@ class SimpleAutosApplicationTests {
     }
 
     @Test
+     void getAutos_byColorAndMake_returnsNoContent(){
+        autosRepository.deleteAll();
+
+        int seq = random.nextInt(50);
+        String color = testAutos.get(seq).getColor();
+        String make = testAutos.get(seq).getMake();
+
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity(
+        String.format("/api/autos?color=%s&make=%s", color, make), AutoList.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+    }
+
+    @Test
+    void getAutos_byColor_exists_returnsColorAuto() {
+        int seq = random.nextInt(50);
+        String color = testAutos.get(seq).getColor();
+
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity(
+                String.format("/api/autos?color=%s", color), AutoList.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().isEmpty()).isFalse();
+        assertThat(response.getBody().getAutomobileList().size()).isPositive();
+    }
+
+    @Test
+    void getAutos_byColor_returnsNoContent() {
+        autosRepository.deleteAll();
+
+        int seq = random.nextInt(50);
+        String color = testAutos.get(seq).getColor();
+
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity(
+                String.format("/api/autos?color=%s", color), AutoList.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+
+    }
+
+    @Test
+    void getAutos_byMake_exists_returnsMakeAuto() {
+        int seq = random.nextInt(50);
+        String make = testAutos.get(seq).getMake();
+
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity(
+                String.format("/api/autos?make=%s", make), AutoList.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().isEmpty()).isFalse();
+        assertThat(response.getBody().getAutomobileList().size()).isPositive();
+    }
+
+    @Test
+    void getAutos_byMake_returnsNoContent() {
+        autosRepository.deleteAll();
+
+        int seq = random.nextInt(50);
+        String make = testAutos.get(seq).getMake();
+
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity(
+          String.format("/api/autos?make=%s", make), AutoList.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+
+    }
+
+
+    @Test
     void addAuto_ReturnsAuto() {
         Automobile automobileToAdd = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
 
@@ -101,6 +188,20 @@ class SimpleAutosApplicationTests {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getVin()).isEqualTo(automobileToAdd.getVin());
     }
+
+//    @Test
+//    void addAuto_ReturnsBadRequest() {
+//        Automobile automobileToAdd = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Content-Type", MediaType.APPLICATION_PDF_VALUE);
+//        HttpEntity<Automobile> request = new HttpEntity<>(automobileToAdd, headers);
+//
+//        ResponseEntity<?> response = testRestTemplate.postForEntity("/api/autos", request, Automobile.class);
+//
+//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+//        assertThat(response.getBody()).isNotNull();;
+//    }
 
     @Test
     void patchAuto_ReturnsAuto() {
