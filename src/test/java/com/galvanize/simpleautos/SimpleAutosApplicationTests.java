@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.http.HttpClient;
@@ -18,6 +19,7 @@ import java.util.Random;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations="classpath:application-test.properties")
 class SimpleAutosApplicationTests {
 
     @Autowired
@@ -125,7 +127,7 @@ class SimpleAutosApplicationTests {
     }
 
     @Test
-    void deleteAuto_returns500() {
+    void deleteAuto_returnsNoContent() {
         Automobile automobileToAdd = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
 
         HttpHeaders headers = new HttpHeaders();
