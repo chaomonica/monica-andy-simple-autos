@@ -110,7 +110,22 @@ class SimpleAutosApplicationTests {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(response.getBody()).isNull();
-     }
+    }
+
+    @Test
+    void getAutos_byColor_exists_returnsColorAuto() {
+        int seq = random.nextInt(50);
+        String color = testAutos.get(seq).getColor();
+
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity(
+                String.format("/api/autos?color=%s", color), AutoList.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().isEmpty()).isFalse();
+        assertThat(response.getBody().getAutomobileList().size()).isPositive();
+    }
 
 
     @Test
