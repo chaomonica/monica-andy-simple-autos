@@ -143,6 +143,20 @@ class SimpleAutosApplicationTests {
 
     }
 
+    @Test
+    void getAutos_byMake_exists_returnsMakeAuto() {
+        int seq = random.nextInt(50);
+        String make = testAutos.get(seq).getMake();
+
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity(
+                String.format("/api/autos?make=%s", make), AutoList.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().isEmpty()).isFalse();
+        assertThat(response.getBody().getAutomobileList().size()).isPositive();
+    }
 
     @Test
     void addAuto_ReturnsAuto() {
