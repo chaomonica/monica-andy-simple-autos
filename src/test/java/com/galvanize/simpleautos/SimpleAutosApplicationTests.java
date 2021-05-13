@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -63,5 +65,62 @@ class SimpleAutosApplicationTests {
         for (Automobile auto : response.getBody().getAutomobileList()) {
             System.out.println(auto);
         }
+    }
+
+    @Test
+    void getAutos_byColorAndMake_exists_returnsColorAndMakeAutoList(){
+        int seq = random.nextInt(50);
+        String color = testAutos.get(seq).getColor();
+        String make = testAutos.get(seq).getMake();
+
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity(
+        String.format("/api/autos?color=%s&make=%s", color, make), AutoList.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().isEmpty()).isFalse();
+        assertThat(response.getBody().getAutomobileList().size()).isGreaterThanOrEqualTo(1);
+        for (Automobile auto : response.getBody().getAutomobileList()) {
+           System.out.println(auto);
+        }
+    }
+
+    @Test
+    void addAuto_ReturnsAuto() {
+        Automobile automobileToAdd = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<Automobile> request = new HttpEntity<>(automobileToAdd, headers);
+
+        ResponseEntity<Automobile> response = testRestTemplate.postForEntity("/api/autos", request, Automobile.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getVin()).isEqualTo(automobileToAdd.getVin());
+    }
+
+    @Test
+    void patchAuto_ReturnsAuto() {
+        testRestTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+
+        Automobile automobileToAdd = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
+
+        Automobile automobileToPatch = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
+        UpdateOwnerRequest update = new UpdateOwnerRequest("BLUE", "Bob Smith");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+        //post request to add auto to patch later
+        HttpEntity<Automobile> postRequest = new HttpEntity<>(automobileToAdd, headers);
+        testRestTemplate.postForEntity("/api/autos", postRequest, Automobile.class);
+
+        //patch request
+        HttpEntity<UpdateOwnerRequest> request = new HttpEntity<>(update, headers);
+        ResponseEntity<Automobile> response = testRestTemplate.exchange("/api/autos/7F03Z01025", HttpMethod.PATCH, request, Automobile.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getVin()).isEqualTo(automobileToPatch.getVin());
     }
 }
