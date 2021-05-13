@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+
 @Repository
 public interface AutosRepository extends JpaRepository <Automobile, Long>{
     List<Automobile> findByColor(String color);
