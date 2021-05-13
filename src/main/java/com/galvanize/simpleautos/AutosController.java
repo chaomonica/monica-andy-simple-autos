@@ -24,7 +24,7 @@ public class AutosController {
         } else {
             temp = autosService.getAutomobilesByColor(color);
         }
-        return temp.isEmpty() ? ResponseEntity.noContent().build() :ResponseEntity.ok(temp);
+        return temp == null || temp.isEmpty() ? ResponseEntity.noContent().build() :ResponseEntity.ok(temp);
     }
 
     @PostMapping("/api/autos")
@@ -36,7 +36,7 @@ public class AutosController {
     public ResponseEntity<Automobile> getAutoWithVin(@PathVariable String vin) {
         Automobile temp = autosService.getAutomobileWithVin(vin);
 
-        return temp.getVin() == null ? ResponseEntity.noContent().build() : ResponseEntity.ok(temp);
+        return temp == null || temp.getVin() == null ? ResponseEntity.noContent().build() : ResponseEntity.ok(temp);
 
 
     }
