@@ -159,6 +159,23 @@ class SimpleAutosApplicationTests {
     }
 
     @Test
+    void getAutos_byMake_returnsNoContent() {
+        autosRepository.deleteAll();
+
+        int seq = random.nextInt(50);
+        String make = testAutos.get(seq).getMake();
+
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity(
+          String.format("/api/autos?make=%s", make), AutoList.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+
+    }
+
+
+    @Test
     void addAuto_ReturnsAuto() {
         Automobile automobileToAdd = new Automobile(2020, "Toyota", "Camry", "GREEN", "John Doe", "7F03Z01025");
 
