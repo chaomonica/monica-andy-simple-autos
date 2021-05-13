@@ -70,6 +70,14 @@ class SimpleAutosApplicationTests {
     }
 
     @Test
+    void getAutos_returnsNoContent() {
+        autosRepository.deleteAll();
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity("/api/autos", AutoList.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+    }
+
+    @Test
     void getAutos_byColorAndMake_exists_returnsColorAndMakeAutoList(){
         int seq = random.nextInt(50);
         String color = testAutos.get(seq).getColor();
@@ -87,6 +95,23 @@ class SimpleAutosApplicationTests {
            System.out.println(auto);
         }
     }
+
+    @Test
+     void getAutos_byColorAndMake_returnsNoContent(){
+        autosRepository.deleteAll();
+
+        int seq = random.nextInt(50);
+        String color = testAutos.get(seq).getColor();
+        String make = testAutos.get(seq).getMake();
+
+        ResponseEntity<AutoList> response = testRestTemplate.getForEntity(
+        String.format("/api/autos?color=%s&make=%s", color, make), AutoList.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getBody()).isNull();
+     }
+
 
     @Test
     void addAuto_ReturnsAuto() {
