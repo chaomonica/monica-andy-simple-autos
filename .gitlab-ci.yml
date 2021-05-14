@@ -33,8 +33,7 @@ docker:
     - docker info
   script:
     - docker build -t am-autos-api .
-  artifacts:
-    image: temp
+
 
 codeCoverage:
   image: adoptopenjdk:8
