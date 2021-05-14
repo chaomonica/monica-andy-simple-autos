@@ -1,4 +1,4 @@
-image: adoptopenjdk:1.8
+image: adoptopenjdk:8
 
 stages:
   - build
@@ -20,7 +20,7 @@ test:
     paths:
       - build/test-results/test/TEST*.xml
 codeCoverage:
-  image: adoptopenjdk:1.8
+  image: adoptopenjdk:8
   needs: 
     - build
     - test
