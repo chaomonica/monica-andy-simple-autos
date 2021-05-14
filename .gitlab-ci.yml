@@ -1,4 +1,4 @@
-image: adoptopenjdk:11
+image: adoptopenjdk:1.8
 
 stages:
   - build
@@ -20,7 +20,7 @@ test:
     paths:
       - build/test-results/test/TEST*.xml
 codeCoverage:
-  image: adoptopenjdk:11
+  image: adoptopenjdk:1.8
   needs: 
     - build
     - test
@@ -41,6 +41,6 @@ deploy:
     - apt-get install -y ruby-dev
     - gem install dpl
     #                        App name from prev step  Key from your heroku account
-    - dpl --provider=heroku --app=vw-autos-api --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=am-autos-api --api-key=$HEROKU_API_KEY
   only: # Heroku will ONLY deploy from main or master branch!
     - main
