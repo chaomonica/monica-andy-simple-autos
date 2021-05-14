@@ -23,11 +23,13 @@ docker:
   services:
     - docker:dind
   before_script:
-    - docker info
+    - echo "$MY_NAME"
     - echo $CI_BUILD_TOKEN | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
   script:
-    - docker build -t $CI_REGISTRY_USER/am-autos-api:latest .
-    - docker push $CI_REGISTRY_USER/am-autos-api:latest
+    - docker build --pull -t "$CI_REGISTRY_IMAGE":"$CI_PIPELINE_IID" .
+    - docker push "$CI_REGISTRY_IMAGE":"$CI_PIPELINE_IID"
+    - docker tag "$CI_REGISTRY_IMAGE":"$CI_PIPELINE_IID" "$CI_REGISTRY_IMAGE":"latest"
+    - docker push "$CI_REGISTRY_IMAGE":"latest"
 
 deploy:
   stage: deploy
