@@ -2,7 +2,6 @@ image: adoptopenjdk:8
 
 stages:
   - build
-
   - docker
 
   - deploy
@@ -15,18 +14,17 @@ build:
     paths:
       - build/libs/*.jar
 
-
 docker:
   stage: docker
   image: docker:latest
   needs:
     - build
-  
+
   services:
     - docker:dind
   before_script:
     - docker info
-    - echo $CI_BUILD_TOKEN | docker login -u "$CI_REGISTRY_USER" -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - echo $CI_BUILD_TOKEN | docker login -u "$CI_REGISTRY_USER" -password-stdin $CI_REGISTRY
   script:
     - docker build -t $CI_REGISTRY_USER/am-autos-api:latest .
     - docker push $CI_REGISTRY_USER/am-autos-api:latest
