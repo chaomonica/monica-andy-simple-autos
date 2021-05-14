@@ -2,9 +2,9 @@ image: adoptopenjdk:8
 
 stages:
   - build
-  # test
+
   - docker
-  - codeCoverage
+
   - deploy
   
 build:
@@ -15,12 +15,13 @@ build:
     paths:
       - build/libs/*.jar
 
+
 docker:
   stage: docker
   image: docker:latest
   needs:
     - build
-    - test
+  
   services:
     - docker:dind
   before_script:
@@ -29,20 +30,7 @@ docker:
   script:
     - docker build -t $CI_REGISTRY_USER/am-autos-api:latest .
     - docker push $CI_REGISTRY_USER/am-autos-api:latest
-codeCoverage:
-  image: adoptopenjdk:8
-  needs: 
-    - build
-    - test
-  stage: codeCoverage
-  script:
-    - ./gradlew jacocoTestReport
-    - ./gradlew jacocoTestCoverageVerification
-  allow_failure: true
-  artifacts: 
-    when: always
-    paths:
-      - build/reports/jacoco/
+
 deploy:
   stage: deploy
   image: ruby:latest
