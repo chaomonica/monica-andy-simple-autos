@@ -2,10 +2,11 @@ image: adoptopenjdk:8
 
 stages:
   - build
+  - test
   - docker
-
+  - codeCoverage
   - deploy
-  
+
 build:
   stage: build
   script:
@@ -14,12 +15,19 @@ build:
     paths:
       - build/libs/*.jar
 
+test:
+  stage: test
+  script:
+    ./gradlew test
+  artifacts:
+    paths:
+      - build/test-results/test/TEST*.xml
+
 docker:
   stage: docker
   image: docker:latest
   needs:
     - build
-
   services:
     - docker:dind
   before_script:
@@ -30,6 +38,22 @@ docker:
     - docker push "$CI_REGISTRY_IMAGE":"$CI_PIPELINE_IID"
     - docker tag "$CI_REGISTRY_IMAGE":"$CI_PIPELINE_IID" "$CI_REGISTRY_IMAGE":"latest"
     - docker push "$CI_REGISTRY_IMAGE":"latest"
+
+codeCoverage:
+  image: adoptopenjdk:8
+  needs:
+    - build
+    - test
+  stage: codeCoverage
+  script:
+    - ./gradlew jacocoTestReport
+    - ./gradlew jacocoTestCoverageVerification
+  allow_failure: true
+  artifacts:
+    when: always
+    paths:
+      - build/reports/jacoco/
+
 
 deploy:
   stage: deploy
