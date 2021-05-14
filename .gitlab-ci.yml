@@ -31,10 +31,10 @@ docker:
     - docker:dind
   before_script:
     - docker info
+    - docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
   script:
-    - docker build -t am-autos-api .
-  artifacts:
-    image: am-autos-api
+    - docker build -t $CI_REGISTRY_USER/am-autos-api:latest .
+    - docker push $CI_REGISTRY_USER/am-autos-api:latest
 
 codeCoverage:
   image: adoptopenjdk:8
