@@ -14,13 +14,7 @@ build:
   artifacts:
     paths:
       - build/libs/*.jar
-test:
-  stage: test
-  script:
-    ./gradlew test
-  artifacts:
-    paths:
-      - build/test-results/test/TEST*.xml
+
 docker:
   stage: docker
   image: docker:latest
