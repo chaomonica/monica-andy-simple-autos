@@ -3,9 +3,10 @@ image: adoptopenjdk:8
 stages:
   - build
   - test
+  - docker
   - codeCoverage
   - deploy
-  - docker
+  
 build:
   stage: build
   script:
