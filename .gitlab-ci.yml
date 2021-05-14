@@ -43,4 +43,4 @@ deploy:
     #                        App name from prev step  Key from your heroku account
     - dpl --provider=heroku --app=vw-autos-api --api-key=$HEROKU_API_KEY
   only: # Heroku will ONLY deploy from main or master branch!
-  - master
+    - main
