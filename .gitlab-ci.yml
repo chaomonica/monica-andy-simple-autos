@@ -5,6 +5,7 @@ stages:
   - test
   - codeCoverage
   - deploy
+  - docker
 build:
   stage: build
   script:
@@ -44,3 +45,15 @@ deploy:
     - dpl --provider=heroku --app=am-autos-api --api-key=$HEROKU_API_KEY
   only: # Heroku will ONLY deploy from main or master branch!
     - main
+docker:
+  stage: docker
+  image: docker:latest
+  needs:
+    - build
+    - test
+  services:
+    - docker:dind
+  before_script:
+    - docker info
+  script:
+    - docker build -t am-autos-api .
