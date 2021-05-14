@@ -10,6 +10,9 @@ public class UpdateOwnerRequest {
         this.owner = owner;
     }
 
+    public UpdateOwnerRequest() {
+    }
+
     public String getColor() {
         return color;
     }
