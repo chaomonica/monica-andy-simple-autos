@@ -19,6 +19,7 @@ public class Automobile {
     private String color;
     @Column(name="owner_name")
     private String owner;
+    @Column(unique = true)
     private String vin;
 
     public Automobile(){

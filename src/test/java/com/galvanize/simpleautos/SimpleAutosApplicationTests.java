@@ -9,9 +9,9 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.web.client.RestTemplate;
 
-import java.net.http.HttpClient;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
