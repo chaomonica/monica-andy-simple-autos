@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: andy-monica-autos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: andy-monica-autos
+  template:
+    metadata:
+      labels:
+        app: andy-monica-autos
+    spec:
+      containers:
+        - image: registry.gitlab.com/galv-vmw-apr-2021/2-simple-autos/monica-andy-simple-autos:latest
+          name: andy-monica-autos
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOST
+              value: 52.26.72.203
+            - name: DB_NAME
+              value: mchao
+            - name: DB_USER
+              value: mchao_user
+            - name: DB_PWD
+              value: 'QL.eLv-QvsNxy-6'
+      imagePullSecrets: # Be sure the token name matches what you created on K8s
+        - name: monicasecret
